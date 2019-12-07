@@ -6,6 +6,10 @@ using System.Text;
 
 namespace AppGestionStagiaires.Services
 {
+    /// <summary>
+    /// Les données sont enregistrer dans une liste des groupes
+    /// La minipulation des données est gérer avec Linq
+    /// </summary>
     public class GroupsService
     {
         private static List<Group> Data_Groups = new List<Group>();
@@ -29,29 +33,21 @@ namespace AppGestionStagiaires.Services
         /// <param name="id"> Id de groupe à supprimer</param>
         public void Delete(int id) {
 
-            Group g = null;
-            foreach (var item in Data_Groups)
-            {
-                if (item.Id == id) {
-                    // Exception : on ne peut pas supprimer un objet de la List en utilisant la boucle foreach
-                    g = item;
-                }
-            }
-            Data_Groups.Remove(g);
+            Group group = this.FindAll().Find(g => g.Id == id);
+            if (group != null)
+                this.FindAll().Remove(group);
+
         }
 
         /// <summary>
         /// Mise à jour un objet Groupe
         /// </summary>
         /// <param name="g">un objet de type groupe contenant les information à mettre à jour</param>
-        public void Update(Group g) {
-            foreach (var item in Data_Groups)
-            {
-                if (item.Id == g.Id)
-                {
-                    item.Nom = g.Nom;
-                }
-            }
+        public void Update(Group group_data) {
+
+            Group group = this.FindAll().Find(g => g.Id == group_data.Id);
+            group.Nom = group_data.Nom;
+             
         }
         /// <summary>
         /// Retourne la liste des groupes à afficher
